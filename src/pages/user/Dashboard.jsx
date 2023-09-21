@@ -8,9 +8,9 @@ import {
   Burger,
   useMantineTheme,
 } from "@mantine/core";
-import TopBar from "./TopBar";
+import TopBar from "../../components/TopBar";
 
-export default function AppShellDemo() {
+export default function UserDashboard() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   return (

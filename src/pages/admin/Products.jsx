@@ -8,11 +8,16 @@ import {
   MediaQuery,
   Burger,
   useMantineTheme,
+  Title,
+  Stack,
+  Button,
 } from "@mantine/core";
 import TopBar from "../../components/TopBar";
-import ProductGrid from "../../components/product-items/product-list";
+import { DATA } from "../../data"; // fake data
+import AdminTable from "../../components/AdminTable";
+import { Link } from "react-router-dom";
 
-export default function AppShellDemo() {
+export default function AdminProducts() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   return (
@@ -34,7 +39,18 @@ export default function AppShellDemo() {
           hidden={!opened}
           width={{ sm: 200, lg: 300 }}
         >
-          <Text>Application navbar</Text>
+          <Title color="#FF8A65">Products</Title>
+          <Stack spacing={20}>
+            <Button>
+              <Link to="/admin/products">Products</Link>
+            </Button>
+            <Button>
+              <Link to="/admin/categories">Categories</Link>
+            </Button>
+            <Button>
+              <Link to="/admin/orders">Orders</Link>
+            </Button>
+          </Stack>
         </Navbar>
       }
       footer={
@@ -66,8 +82,7 @@ export default function AppShellDemo() {
         </Header>
       }
     >
-      <ProductGrid />
-      <Text>Resize app to see responsive navbar in action</Text>
+      <AdminTable data={DATA} />
     </AppShell>
   );
 }

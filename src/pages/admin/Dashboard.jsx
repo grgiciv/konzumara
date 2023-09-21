@@ -8,10 +8,14 @@ import {
   MediaQuery,
   Burger,
   useMantineTheme,
+  Title,
+  Button,
+  Stack,
 } from "@mantine/core";
-import TopBar from "./TopBar";
+import TopBar from "../../components/TopBar";
+import { Link } from "react-router-dom";
 
-export default function AppShellDemo() {
+export default function AdminDashboard() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   return (
@@ -33,7 +37,18 @@ export default function AppShellDemo() {
           hidden={!opened}
           width={{ sm: 200, lg: 300 }}
         >
-          <Text>Application navbar</Text>
+          <Title color="#FF8A65">Admin Pages</Title>
+          <Stack spacing={20}>
+            <Link to="/admin/products">
+              <Button>Products</Button>
+            </Link>
+            <Link to="/admin/categories">
+              <Button>Categories</Button>
+            </Link>
+            <Link to="/admin/orders">
+              <Button>Orders</Button>
+            </Link>
+          </Stack>
         </Navbar>
       }
       footer={
@@ -65,7 +80,9 @@ export default function AppShellDemo() {
         </Header>
       }
     >
-      <Text>Resize app to see responsive navbar in action</Text>
+      <Text>
+        Welcome to Admin pages. Select one option on the left for details.
+      </Text>
     </AppShell>
   );
 }
