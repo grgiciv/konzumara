@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AppShell,
   Header,
@@ -7,15 +7,39 @@ import {
   MediaQuery,
   Burger,
   useMantineTheme,
+  Group,
+  Button,
 } from "@mantine/core";
 import TopBar from "../components/TopBar";
 import { DATA } from "../data"; // fake data
 import ProductList from "../components/product-items/product-list";
+import supabase from "../config/supabase";
 
 export default function HomePage() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-  console.log("aafsf", DATA);
+  const [fetchError, setFetchError] = useState(null);
+  const [products, setProducts] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data: products, error } = await supabase
+        .from("products")
+        .select("*");
+      if (error) {
+        setFetchError("Could not fetch products");
+        setProducts(null);
+        console.log(error);
+      }
+      if (products) {
+        setProducts(products);
+        setFetchError(null);
+        console.log(products);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <AppShell
@@ -58,8 +82,12 @@ export default function HomePage() {
         </Header>
       }
     >
-      <ProductList data={DATA} />
-      <Text>Resize app to see responsive navbar in action</Text>
+      {fetchError && <p>{fetchError}</p>}
+      {products && <ProductList data={products} />}
+
+      <Group style={{ justifyContent: "center" }}>
+        <Button>Load more</Button>
+      </Group>
     </AppShell>
   );
 }
