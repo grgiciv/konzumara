@@ -5,8 +5,10 @@ import {
   TextInput,
   Stack,
   Checkbox,
+  PasswordInput,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, yupResolver } from "@mantine/form";
+import { REGISTER_SCHEMA } from "../../../schema";
 
 export default function RegisterModal({ isOpened, onClose }) {
   const form = useForm({
@@ -18,10 +20,10 @@ export default function RegisterModal({ isOpened, onClose }) {
       isAdmin: false,
     },
 
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-    },
+    validate: yupResolver(REGISTER_SCHEMA),
   });
+
+  function handleRegister() {}
 
   return (
     <>
@@ -45,22 +47,28 @@ export default function RegisterModal({ isOpened, onClose }) {
               required
               {...form.getInputProps("email")}
             />
-            <TextInput
+            <PasswordInput
               value={form?.values.password}
               placeholder="Your password"
               label="Enter your password:"
               required
               {...form.getInputProps("password")}
             />
-            <TextInput
+            <PasswordInput
               value={form?.values.password}
               placeholder="Enter your password again"
               label="Re-enter your password:"
               required
               {...form.getInputProps("confirmPassword")}
             />
-            <Checkbox color="green" label="Register as administrator" />
-            <Button type="submit">Register</Button>
+            <Checkbox
+              color="green"
+              label="Register as administrator"
+              {...form.getInputProps("isAdmin")}
+            />
+            <Button type="submit" onClick={handleRegister}>
+              Register
+            </Button>
           </form>
         </Stack>
       </Modal>

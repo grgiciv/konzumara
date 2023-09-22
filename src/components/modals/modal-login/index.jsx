@@ -1,5 +1,13 @@
-import { Modal, Button, Title, TextInput, Stack } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import {
+  Modal,
+  Button,
+  Title,
+  TextInput,
+  Stack,
+  PasswordInput,
+} from "@mantine/core";
+import { useForm, yupResolver } from "@mantine/form";
+import { LOGIN_SCHEMA } from "../../../schema";
 
 export default function LogInModal({ isOpened, onClose }) {
   const form = useForm({
@@ -8,9 +16,7 @@ export default function LogInModal({ isOpened, onClose }) {
       password: "",
     },
 
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-    },
+    validate: yupResolver(LOGIN_SCHEMA),
   });
 
   return (
@@ -28,7 +34,7 @@ export default function LogInModal({ isOpened, onClose }) {
               required
               {...form.getInputProps("email")}
             />
-            <TextInput
+            <PasswordInput
               value={form?.values.password}
               placeholder="Your password"
               label="Enter your password:"
