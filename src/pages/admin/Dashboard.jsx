@@ -13,7 +13,7 @@ import {
   Stack,
 } from "@mantine/core";
 import TopBar from "../../components/TopBar";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 export default function AdminDashboard() {
   const theme = useMantineTheme();
@@ -80,9 +80,7 @@ export default function AdminDashboard() {
         </Header>
       }
     >
-      <Text>
-        Welcome to Admin pages. Select one option on the left for details.
-      </Text>
+      <Outlet />
     </AppShell>
   );
 }

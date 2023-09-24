@@ -33,8 +33,6 @@ export default function HomePage() {
       }
       if (products) {
         setProducts(products);
-        setFetchError(null);
-        console.log(products);
       }
     };
 

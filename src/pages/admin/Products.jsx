@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   AppShell,
   Navbar,
@@ -13,13 +13,37 @@ import {
   Button,
 } from "@mantine/core";
 import TopBar from "../../components/TopBar";
-import { DATA } from "../../data"; // fake data
+//import { DATA } from "../../data"; // fake data
 import AdminTable from "../../components/AdminTable";
 import { Link } from "react-router-dom";
+import supabase from "../../config/supabase";
 
 export default function AdminProducts() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const [fetchError, setFetchError] = useState(null);
+  const [products, setProducts] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data: products, error } = await supabase
+        .from("products")
+        .select("*");
+      if (error) {
+        setFetchError("Could not fetch products");
+        setProducts(null);
+        console.log(error);
+      }
+      if (products) {
+        setProducts(products);
+        setFetchError(null);
+        console.log(products);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <AppShell
       styles={{
@@ -41,15 +65,17 @@ export default function AdminProducts() {
         >
           <Title color="#FF8A65">Products</Title>
           <Stack spacing={20}>
-            <Button>
-              <Link to="/admin/products">Products</Link>
-            </Button>
-            <Button>
-              <Link to="/admin/categories">Categories</Link>
-            </Button>
-            <Button>
-              <Link to="/admin/orders">Orders</Link>
-            </Button>
+            <Link to="/admin/products">
+              <Button>Products</Button>
+            </Link>
+
+            <Link to="/admin/categories">
+              <Button>Categories</Button>
+            </Link>
+
+            <Link to="/admin/orders">
+              <Button>Orders</Button>
+            </Link>
           </Stack>
         </Navbar>
       }
@@ -82,7 +108,8 @@ export default function AdminProducts() {
         </Header>
       }
     >
-      <AdminTable data={DATA} />
+      {fetchError && <p>{fetchError}</p>}
+      {products && <AdminTable data={products} />}
     </AppShell>
   );
 }

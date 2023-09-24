@@ -30,12 +30,7 @@ export default function TopBar({ data }) {
 
   return (
     <>
-      <Image
-        maw={60}
-        radius="xl"
-        src="../public/Shoplogo.png"
-        alt="Random image"
-      />
+      <Image maw={60} radius="xl" src="/Shoplogo.png" alt="Random image" />
       <Group position="right" spacing="xl">
         <Button variant="outline" size="lg" onClick={open}>
           <ShoppingCart size="44" color="#FF8A65" variant="Outline" />

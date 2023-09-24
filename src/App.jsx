@@ -13,17 +13,14 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="admin" element={<AdminDashboard />} />
-        <Route path="admin/products" element={<AdminProducts />} />
-        <Route path="admin/categories" element={<AdminCategories />} />
-        <Route path="admin/orders" element={<AdminOrders />} />
+        <Route path="admin" element={<AdminDashboard />}>
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="categories" element={<AdminCategories />} />
+          <Route path="orders" element={<AdminOrders />} />
+        </Route>
 
-        <Route path="user" element={<UserDashboard />} />
+        <Route path="home" element={<UserDashboard />} />
         <Route path="*" element={<Error />} />
-
-        {/* <HomePage /> */}
-        {/* <AdminProducts /> */}
-        {/* <AdminDashboard /> */}
       </Routes>
     </BrowserRouter>
   );
