@@ -21,28 +21,30 @@ import supabase from "../../config/supabase";
 export default function AdminProducts() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-  const [fetchError, setFetchError] = useState(null);
+
   const [products, setProducts] = useState(null);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const { data: products, error } = await supabase
-        .from("products")
-        .select("*");
-      if (error) {
-        setFetchError("Could not fetch products");
-        setProducts(null);
-        console.log(error);
-      }
-      if (products) {
-        setProducts(products);
-        setFetchError(null);
-        console.log(products);
-      }
-    };
+  const fetchProducts = async () => {
+    const { data, error } = await supabase.from("products").select("*");
 
+    setProducts(data);
+
+    return data;
+  };
+
+  async function onDelete(id) {
+    const { data, error } = await supabase
+      .from("products")
+      .delete()
+      .eq("id", id)
+      .select();
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+  useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [onDelete]);
 
   return (
     <AppShell
@@ -108,8 +110,13 @@ export default function AdminProducts() {
         </Header>
       }
     >
-      {fetchError && <p>{fetchError}</p>}
-      {products && <AdminTable data={products} />}
+      {products && (
+        <AdminTable
+          getData={fetchProducts}
+          data={products}
+          onDelete={onDelete}
+        />
+      )}
     </AppShell>
   );
 }

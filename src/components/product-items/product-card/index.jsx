@@ -12,7 +12,7 @@ export default function ProductCard({ data }) {
       </Card.Section>
 
       <Group position="apart" mt="md" mb="xs">
-        <Text weight={500}>{data.name}</Text>
+        <Text weight={500}>{data.title}</Text>
         <Badge color="pink" variant="light">
           Price: {data.price}
         </Badge>

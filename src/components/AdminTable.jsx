@@ -2,8 +2,10 @@ import { Table, Button, Group, Text } from "@mantine/core";
 import { useState } from "react";
 import "./modals/modal-addProduct/index";
 import AddProduct from "./modals/modal-addProduct/index";
+import supabase from "../config/supabase";
+import { AdminTableRow } from "./AdminTableRow";
 
-export default function AdminTable({ data }) {
+export default function AdminTable({ data, onDelete }) {
   const [addProduct, setAddProduct] = useState(false);
 
   function addNewProduct() {
@@ -38,24 +40,11 @@ export default function AdminTable({ data }) {
         <tbody>
           {data.map((product) => {
             return (
-              <tr key={product.id}>
-                <td>
-                  <Text color="#FF8A65" size="lg">
-                    {product.title}
-                  </Text>
-                </td>
-                <td>{product.description}</td>
-                <td>{product.quantity}</td>
-                <td>{product.is_sale}</td>
-                <td>{product.sale_price}</td>
-                <td>{product.price}</td>
-                <td>
-                  <button>Edit</button>
-                </td>
-                <td>
-                  <button>Delete</button>
-                </td>
-              </tr>
+              <AdminTableRow
+                onDelete={onDelete}
+                key={product.id}
+                product={product}
+              />
             );
           })}
         </tbody>
