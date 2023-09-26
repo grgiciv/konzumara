@@ -20,12 +20,18 @@ export default function HomePage() {
   const [opened, setOpened] = useState(false);
   const [fetchError, setFetchError] = useState(null);
   const [products, setProducts] = useState(null);
+  const [loadMore, setLoadMore] = useState(7);
+
+  function increaseLoadMore() {
+    setLoadMore(loadMore + 8);
+  }
 
   useEffect(() => {
     const fetchProducts = async () => {
       const { data: products, error } = await supabase
         .from("products")
-        .select("*");
+        .select("*")
+        .range(0, loadMore);
       if (error) {
         setFetchError("Could not fetch products");
         setProducts(null);
@@ -37,7 +43,7 @@ export default function HomePage() {
     };
 
     fetchProducts();
-  }, []);
+  }, [loadMore]);
 
   return (
     <AppShell
@@ -84,7 +90,7 @@ export default function HomePage() {
       {products && <ProductList data={products} />}
 
       <Group style={{ justifyContent: "center" }}>
-        <Button>Load more</Button>
+        <Button onClick={increaseLoadMore}>Load more</Button>
       </Group>
     </AppShell>
   );
