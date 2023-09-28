@@ -8,8 +8,12 @@ import {
 } from "@mantine/core";
 import { useForm, yupResolver } from "@mantine/form";
 import { LOGIN_SCHEMA } from "../../../schema";
+import { useContext } from "react";
+import { AuthContext } from "../../../contexts/AuthProvider";
+import supabase from "../../../config/supabase";
 
 export default function LogInModal({ isOpened, onClose }) {
+  const { signIn, setUser } = useContext(AuthContext);
   const form = useForm({
     initialValues: {
       email: "",
@@ -18,6 +22,17 @@ export default function LogInModal({ isOpened, onClose }) {
 
     validate: yupResolver(LOGIN_SCHEMA),
   });
+
+  const handleLogin = async () => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: form.values.email,
+      password: form.values.password,
+    });
+    if (data) {
+      setUser(data);
+      onClose();
+    }
+  };
 
   return (
     <>
@@ -41,7 +56,9 @@ export default function LogInModal({ isOpened, onClose }) {
               required
               {...form.getInputProps("password")}
             />
-            <Button type="submit">Log in</Button>
+            <Button type="submit" onClick={handleLogin}>
+              Log in
+            </Button>
           </form>
         </Stack>
       </Modal>

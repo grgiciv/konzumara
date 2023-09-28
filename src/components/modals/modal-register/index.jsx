@@ -9,21 +9,49 @@ import {
 } from "@mantine/core";
 import { useForm, yupResolver } from "@mantine/form";
 import { REGISTER_SCHEMA } from "../../../schema";
+import supabase from "../../../config/supabase";
+import { useToggle } from "@mantine/hooks";
+import { useContext } from "react";
+import { AuthContext } from "../../../contexts/AuthProvider";
 
 export default function RegisterModal({ isOpened, onClose }) {
+  const [admin, setAdmin] = useToggle([false, true]);
+  const userValues = useContext(AuthContext);
+  console.log(typeof userValues, "ASDAAF");
+
   const form = useForm({
     initialValues: {
-      fullName: "",
+      full_name: "",
       email: "",
       password: "",
       confirmPassword: "",
-      isAdmin: false,
+      is_admin: false,
     },
 
     validate: yupResolver(REGISTER_SCHEMA),
   });
 
-  function handleRegister() {}
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    let { data, error } = await supabase.auth.signUp({
+      email: form.values.email,
+      password: form.values.password,
+      options: {
+        data: {
+          full_name: form.values.full_name,
+          is_admin: form.values.is_admin,
+        },
+      },
+    });
+    form.reset();
+    if (error) {
+      console.log("error je", error);
+    }
+    if (data) {
+      console.log("data je", data);
+    }
+    onClose();
+  };
 
   return (
     <>
@@ -34,11 +62,11 @@ export default function RegisterModal({ isOpened, onClose }) {
         <Stack spacing="xl">
           <form onSubmit={form.onSubmit((values) => console.log(values))}>
             <TextInput
-              value={form?.values.fullName}
+              value={form?.values.full_name}
               placeholder="Your full name"
               label="Enter your full name:"
               required
-              {...form.getInputProps("fullName")}
+              {...form.getInputProps("full_name")}
             />
             <TextInput
               value={form?.values.email}
@@ -62,9 +90,11 @@ export default function RegisterModal({ isOpened, onClose }) {
               {...form.getInputProps("confirmPassword")}
             />
             <Checkbox
+              value={admin}
               color="green"
+              onClick={setAdmin}
               label="Register as administrator"
-              {...form.getInputProps("isAdmin")}
+              {...form.getInputProps("is_admin")}
             />
             <Button type="submit" onClick={handleRegister}>
               Register
