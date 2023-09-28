@@ -1,4 +1,4 @@
-import { Group, Button, Image } from "@mantine/core";
+import { Group, Button, Image, Text } from "@mantine/core";
 import { ShoppingCart } from "iconsax-react";
 import CartDrawer from "./drawers/cart-drawer";
 import LogInModal from "./modals/modal-login";
@@ -6,6 +6,7 @@ import RegisterModal from "./modals/modal-register";
 import { useState, useContext } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { AuthContext } from "../contexts/AuthProvider";
+import { Link } from "react-router-dom";
 
 export default function TopBar({ data }) {
   //const [cartOpen, setCartOpen] = useState(false);
@@ -35,8 +36,17 @@ export default function TopBar({ data }) {
 
   return (
     <>
-      <Image maw={60} radius="xl" src="/Shoplogo.png" alt="Random image" />
+      <Link to="/">
+        <Image maw={60} radius="xl" src="/Shoplogo.png" alt="Random image" />
+      </Link>
       <Group position="right" spacing="xl">
+        {console.log(user, "ASDASDASFGRGRETH")}
+        {user && <Text>Welcome back {user.user_metadata.full_name}</Text>}
+        {user && user.user_metadata.is_admin && (
+          <Link to="/admin/">
+            <Button>Admin pages</Button>
+          </Link>
+        )}
         <Button variant="outline" size="lg" onClick={open}>
           <ShoppingCart size="44" color="#FF8A65" variant="Outline" />
         </Button>
