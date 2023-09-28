@@ -41,17 +41,17 @@ export default function AdminOrders() {
         >
           <Title color="#FF8A65">Orders</Title>
           <Stack spacing={20}>
-            <Button>
-              <Link to="/admin/products">Products</Link>
-            </Button>
+            <Link to="/admin/products">
+              <Button w={150}>Products</Button>
+            </Link>
 
-            <Button>
-              <Link to="/admin/categories">Categories</Link>
-            </Button>
+            <Link to="/admin/categories">
+              <Button w={150}>Categories</Button>
+            </Link>
 
-            <Button>
-              <Link to="/admin/orders">Orders</Link>
-            </Button>
+            <Link to="/admin/orders">
+              <Button w={150}>Orders</Button>
+            </Link>
           </Stack>
         </Navbar>
       }

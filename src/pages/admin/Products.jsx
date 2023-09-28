@@ -91,15 +91,15 @@ export default function AdminProducts() {
           <Title color="#FF8A65">Products</Title>
           <Stack spacing={20}>
             <Link to="/admin/products">
-              <Button>Products</Button>
+              <Button w={150}>Products</Button>
             </Link>
 
             <Link to="/admin/categories">
-              <Button>Categories</Button>
+              <Button w={150}>Categories</Button>
             </Link>
 
             <Link to="/admin/orders">
-              <Button>Orders</Button>
+              <Button w={150}>Orders</Button>
             </Link>
           </Stack>
         </Navbar>

@@ -4,7 +4,7 @@ export default function ProductCard({ data }) {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Card.Section>
-        <Image src={data.image} height={160} alt={data.title} />
+        <Image src={data.image} height={200} width={200} alt={data.title} />
       </Card.Section>
 
       <Group position="apart" mt="md" mb="xs">
