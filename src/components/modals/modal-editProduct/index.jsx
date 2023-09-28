@@ -178,7 +178,7 @@ export default function EditProduct({
               value={form?.values.category}
               {...form.getInputProps("category")}
             />
-            <Button type="button" onClick={updateProduct}>
+            <Button type="submit" onClick={updateProduct}>
               Edit product
             </Button>
           </form>

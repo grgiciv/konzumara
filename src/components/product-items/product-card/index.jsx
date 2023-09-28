@@ -4,18 +4,23 @@ export default function ProductCard({ data }) {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Card.Section>
-        <Image
-          src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-          height={160}
-          alt="Norway"
-        />
+        <Image src={data.image} height={160} alt={data.title} />
       </Card.Section>
 
       <Group position="apart" mt="md" mb="xs">
         <Text weight={500}>{data.title}</Text>
-        <Badge color="pink" variant="light">
-          Price: {data.price}
-        </Badge>
+        {data.is_sale ? (
+          <Group>
+            <Text color="#7d7a77">
+              <s>Price: {data.price}€</s>
+            </Text>
+            <Badge color="green">
+              <Text size={"md"}>Price: {data.sale_price}€</Text>
+            </Badge>
+          </Group>
+        ) : (
+          <Text color="#FF8A65">Price: {data.price}€</Text>
+        )}
       </Group>
 
       <Button
