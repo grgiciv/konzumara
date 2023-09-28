@@ -44,6 +44,7 @@ export function AdminTableRow({ onDelete, product }) {
         sale_price={product.sale_price}
         price={product.price}
         category={product.category}
+        image={product.image}
       />
     </>
   );

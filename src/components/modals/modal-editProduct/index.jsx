@@ -15,7 +15,8 @@ import { useForm, yupResolver } from "@mantine/form";
 import { useToggle } from "@mantine/hooks";
 import supabase from "../../../config/supabase";
 import { ADD_PRODUCT } from "../../../schema";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../../../contexts/AuthProvider";
 
 export default function EditProduct({
   isOpened,
@@ -28,37 +29,12 @@ export default function EditProduct({
   sale_price,
   price,
   category,
+  image,
 }) {
-  const [isOnSale, toggle] = useState(false); /* 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState(0);
-  const [is_sale, setIs_sale] = useState(false);
-  const [sale_price, setSale_price] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [category, setCategory] = useState("");
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const { data } = await supabase
-        .from("products")
-        .select()
-        .eq("id", productId)
-        .single();
-      console.log("WAA", data.id);
-      setTitle(data.title);
-      setDescription(data.description);
-      setQuantity(data.quantity);
-      setIs_sale(data.is_sale);
-      setSale_price(data.sale_price);
-      setPrice(data.price);
-      setCategory(data.category);
-      console.log(data);
-    };
-    fetchProduct();
-  }, []);
- */
-
+  const [isOnSale, toggle] = useState(false);
+  const [imageURL, setImageURL] = useState("");
+  const { user } = useContext(AuthContext);
+  console.log(image, "vvvv");
   const form = useForm({
     initialValues: {
       title: title,
@@ -68,10 +44,23 @@ export default function EditProduct({
       sale_price: sale_price,
       price: price,
       category: category,
+      image: image,
     },
 
     validate: yupResolver(ADD_PRODUCT),
   });
+
+  async function replaceImage(e) {
+    let file = e;
+    let randomid = Math.random().toString(36).slice(2, 11);
+    const { data, error } = supabase.storage
+      .from("uploads")
+      .upload(user.id + "/" + randomid, file);
+
+    const baseURL =
+      "https://whztrazdmfdndpyhsevu.supabase.co/storage/v1/object/public/uploads/";
+    setImageURL(baseURL + user.id + "/" + randomid);
+  }
 
   async function updateProduct() {
     const { error } = await supabase
@@ -83,35 +72,12 @@ export default function EditProduct({
         is_sale: form.values.is_sale,
         sale_price: form.values.sale_price,
         price: form.values.price,
+        image: imageURL,
         //category: form.values.category,
       })
       .eq("id", productId);
     onClose();
   }
-
-  /* const { data, error } = await supabase
-      .from("products")
-      .insert([
-        {
-          title: form.values.title,
-          description: form.values.description,
-          quantity: form.values.quantity,
-          is_sale: form.values.is_sale,
-          sale_price: form.values.sale_price,
-          price: form.values.price,
-        },
-      ])
-      .select();
-    if (error) {
-      console.log(error);
-    }
-    if (data) {
-      console.log(data);
-    }
-    console.log("Turbo top", form[1]);
-    form.reset();
-    onClose();
-    toggle(); */
 
   return (
     <>
@@ -174,9 +140,16 @@ export default function EditProduct({
               label="Select one category"
               placeholder="Fruit"
               required
-              data={["React", "Angular", "Vue", "Svelte"]}
+              data={["Vegetables", "Fruits", "Sodas"]}
               value={form?.values.category}
               {...form.getInputProps("category")}
+            />
+            <FileInput
+              label="Input product picture"
+              placeholder="Select image for product"
+              onChange={(e) => replaceImage(e)}
+              type="file"
+              accept="image/png, image/jpeg"
             />
             <Button type="submit" onClick={updateProduct}>
               Edit product

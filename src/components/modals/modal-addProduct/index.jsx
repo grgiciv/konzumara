@@ -67,8 +67,8 @@ export default function AddProduct({ isOpened, onClose }) {
           image: imageURL,
         },
       ])
-      .select()
-      .from();
+      .select();
+
     if (data) {
       console.log(data);
     }
